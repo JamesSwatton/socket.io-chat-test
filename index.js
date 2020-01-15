@@ -6,10 +6,19 @@ app.get('/', (req, res) => {
     res.sendFile(__dirname + '/index.html');
 });
 
+// show user connection status in terminal
 io.on('connection', (socket) => {
     console.log('a user connected');
     socket.on('disconnect', () => {
         console.log('user disconnected');
+    });
+});
+
+// broadcast connection status message to users
+io.on('connection', (socket) => {
+    io.emit('chat message', 'a user connected');
+    socket.on('disconnect', () => {
+        io.emit('chat message', 'a user disconnected');
     });
 });
 
